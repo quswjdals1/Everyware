@@ -9,10 +9,16 @@
 
 
 ## 화면
-<img src="https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3" width="200" height="400"/>
-&nbsp;
-<img src="https://github.com/quswjdals1/Everyware/assets/33611408/43064b96-a032-478b-b82b-76622897edcf" width="600" height="400"/>
-<br>
+<div align="center">
+  <img src="https://github.com/quswjdals1/Everyware/assets/33611408/43064b96-a032-478b-b82b-76622897edcf" width="600" height="400"/>
+</div>
+<div align="center">
+  <strong>[메인화면]</strong>
+</div>
+
+<div align="center">
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3" width="200" height="400"/>
+</div>
 <div align="center">
   <strong>[채팅방 ui]</strong>
 </div>
