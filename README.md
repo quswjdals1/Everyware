@@ -26,13 +26,12 @@
 </div>
 <br><br>
 
+<div align="center">
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3" width="200" height="400"/>
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/6db17b1c-d093-4ce9-9678-949203017ef3" width="600" height="400"/>
+</div>
+<div align="center">
+  <strong>[알람 목록 및 실시간 알람]</strong>
+</div>
+<br><br>
 
-
-[이미지 파일 선택시 미리보기]
-
-
-
-
-[알람 목록]
-
-[실시간 알람]
