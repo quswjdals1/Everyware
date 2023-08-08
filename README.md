@@ -11,11 +11,10 @@
 [접속 사원 확인]
 
 
-
+![채팅1](https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3)
 
 [채팅방 ui]
 
-![채팅1](https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3)
 
 
 
