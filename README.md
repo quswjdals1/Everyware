@@ -7,6 +7,8 @@
 
 기술스택: Spring, Spring- security, spring-websocket, mybatis, Bootstrap, jQuery
 
+담당 기능: 마이페이지, 캘린더, 캘린더 관리자 페이지, 메일, 메일 관리자 페이지, 채팅, 채팅 관리자 페이지, 설문, 알람
+
 
 ## 화면
 <div align="center">
