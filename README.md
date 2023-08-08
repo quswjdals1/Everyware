@@ -27,11 +27,19 @@
 <br><br>
 
 <div align="center">
- <img src="https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3" width="200" height="400"/>
- <img src="https://github.com/quswjdals1/Everyware/assets/33611408/6db17b1c-d093-4ce9-9678-949203017ef3" width="600" height="400"/>
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/3ac0ff03-0d35-4cc4-b3f9-4aeb0ebf3dc1" width="200" height="200"/>
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/fa35161d-697e-4542-8275-42ff5c677174" width="200" height="200"/>
 </div>
 <div align="center">
   <strong>[알람 목록 및 실시간 알람]</strong>
 </div>
 <br><br>
 
+<div align="center">
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/3ac0ff03-0d35-4cc4-b3f9-4aeb0ebf3dc1" width="200" height="400"/>
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/93c15034-1803-4ad9-bbad-aabbc69abff4" width="600" height="400"/>
+</div>
+<div align="center">
+  <strong>[메일 ui]</strong>
+</div>
+<br><br>
