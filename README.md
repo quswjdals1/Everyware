@@ -13,7 +13,9 @@
 &nbsp;
 <img src="https://github.com/quswjdals1/Everyware/assets/33611408/43064b96-a032-478b-b82b-76622897edcf" width="600" height="400"/>
 <br>
-__<center>[채팅방 ui]</center>__
+<div align="center">
+  <strong>[채팅방 ui]</strong>
+</div>
 
 
 
