@@ -27,8 +27,8 @@
 <br><br>
 
 <div align="center">
- <img src="https://github.com/quswjdals1/Everyware/assets/33611408/3ac0ff03-0d35-4cc4-b3f9-4aeb0ebf3dc1" width="200" height="200"/>
- <img src="https://github.com/quswjdals1/Everyware/assets/33611408/fa35161d-697e-4542-8275-42ff5c677174" width="200" height="200"/>
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/3ac0ff03-0d35-4cc4-b3f9-4aeb0ebf3dc1" width="300" height="200"/>
+ <img src="https://github.com/quswjdals1/Everyware/assets/33611408/fa35161d-697e-4542-8275-42ff5c677174" width="300" height="200"/>
 </div>
 <div align="center">
   <strong>[알람 목록 및 실시간 알람]</strong>
