@@ -6,3 +6,24 @@
 
 
 기술스택: Spring, Spring- security, spring-websocket, mybatis, Bootstrap, jQuery
+
+
+[접속 사원 확인]
+
+
+
+
+[채팅방 ui]
+
+
+
+
+
+[이미지 파일 선택시 미리보기]
+
+
+
+
+[알람 목록]
+
+[실시간 알람]
