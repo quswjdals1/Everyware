@@ -36,7 +36,6 @@
 <br><br>
 
 <div align="center">
- <img src="https://github.com/quswjdals1/Everyware/assets/33611408/3ac0ff03-0d35-4cc4-b3f9-4aeb0ebf3dc1" width="200" height="400"/>
  <img src="https://github.com/quswjdals1/Everyware/assets/33611408/93c15034-1803-4ad9-bbad-aabbc69abff4" width="600" height="400"/>
 </div>
 <div align="center">
