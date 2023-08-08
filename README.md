@@ -10,7 +10,7 @@
 
 [접속 사원 확인]
 
-<img src="[이미지주소.png](https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3)https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3" width="200" height="200"/>
+<img src="https://github.com/quswjdals1/Everyware/assets/33611408/20f5ac57-c9e7-4448-87be-8651ba4c5cb3" width="200" height="200"/>
 [채팅방 ui]
 
 
