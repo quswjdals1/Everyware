@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.everyware.mapper.LoginMapper">
+
+	<resultMap type="employee" id="emplogin">
+		<id property="empId" column="emp_id"/>
+		<result property="empId" column="emp_id"/>
+		<result property="empPw" column="emp_pw"/>
+		<result property="empName" column="emp_name"/>
+		<result property="deptId" column="dept_id"/>
+		<result property="jbgdId" column="jbgd_id"/>
+		<result property="empBirth" column="emp_birth"/>
+		<result property="empTel" column="emp_tel"/>
+		<result property="empMail" column="emp_mail"/>
+		<result property="empPost" column="emp_post"/>
+		<result property="empAddr1" column="emp_addr1"/>
+		<result property="empAddr2" column="emp_addr2"/>
+		<result property="empDate" column="emp_date"/>
+		<result property="empIdno" column="emp_idno"/>
+		<result property="empVac" column="emp_vac"/>
+		<result property="empProfile" column="emp_profile"/>
+		<result property="groupNo" column="group_no"/>
+		<result property="custId" column="cust_id"/>
+		
+		<result property="deptNm" column="dept_nm"></result>
+		<result property="conm" column="conm"></result>
+		<result property="jbgdNm" column="jbgd_nm"></result>
+		
+		<association property="empAuthority" javaType="empAuthority">
+			<result property="authrtId" column="authrt_id"/>
+			<result property="empId" column="emp_id"/>
+			
+			<association property="authorityGroup" javaType="authorityGroup">
+				<result property="authrtId" column="authrt_id"/>
+				<result property="authrtNm" column="authrt_nm"/>
+				<result property="custId" column="cust_id"/>
+				
+				<collection property="authMenuList" resultMap="authMenuListResultMap"></collection>
+			</association>
+		</association>
+		<collection property="authMenuList" resultMap="authMenuListResultMap"></collection>
+	</resultMap>
+    <resultMap type="authMenu" id="authMenuListResultMap">
+    	<id property="authrtId" column="authrt_id"/>
+		<id property="menuId" column="menu_id"/>
+		<result property="authrtId" column="authrt_id"/>
+		<result property="menuId" column="menu_id"/>
+		<association property="menu" javaType="menu">
+			<result property="menuId" column="menu_id"/>
+			<result property="upMenuId" column="upMenu_id"/>
+			<result property="menuSe" column="menu_se"/>
+			<result property="menuNm" column="menu_nm"/>
+			<result property="useYn" column="use_yn"/>
+			<result property="menuOrd" column="menu_ord"/>
+			<result property="menuUrl" column="menu_url"/>
+		</association>
+    </resultMap>
+   
+    
+	<select id="readByEmployeeId" parameterType="string" resultMap="emplogin">
+		select 
+		a.EMP_ID,a.EMP_PW,a.DEPT_ID,a.JBGD_ID,a.EMP_NAME,a.EMP_BIRTH,a.EMP_tel,a.EMP_MAIL,a.EMP_POST,a.EMP_ADDR1,a.EMP_ADDR2,a.EMP_DATE,
+		EMP_IDNO,EMP_VAC,EMP_PROFILE,a.GROUP_NO,a.CUST_ID,d.jbgd_id,e.dept_id,e.dept_nm,conm,d.jbgd_nm,c.authrt_id,c.authrt_nm,
+        g.*,h.*
+		from 
+		employee a join emp_authority b on (a.emp_id=b.emp_id and a.emp_id=#{empId})
+        join position d on(a.jbgd_id=d.jbgd_id)
+        join department e on(a.dept_id=e.dept_id)
+        join (select cust_id,conm from client) f on(a.cust_id=f.cust_id)
+        join authority_group c on (b.authrt_id = c.authrt_id)
+        join auth_menu g on(c.authrt_id = g.authrt_id)
+        join menu h on(g.menu_id=h.menu_id)
+	</select>
+	<select id="readByClientId" parameterType="string" resultType="client">
+		select * from client where cust_id=#{custId}	
+	</select>
+</mapper>

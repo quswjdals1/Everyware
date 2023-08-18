@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="addressBook">
+	<!-- 폴더 insert --> 
+	<insert id="insertFolder" parameterType="folder">
+		insert into address_book_folder(
+			fol_sn, emp_id, fol_sn2, fol_nm
+		) values (
+			seq_address_book_folder.nextval, #{empId}, #{folSn2}, #{folNm}
+		)
+	</insert>
+
+	<!-- 폴더 select -->
+	<select id="selectFolderList" parameterType="string" resultType="folder">
+		select fol_sn, fol_sn2, fol_nm
+		from address_book_folder
+		where emp_id = #{empId}
+	</select>
+
+	<!-- 폴더 update -->
+	<update id="updateFolder" parameterType="folder">
+		update address_book_folder
+		set
+			fol_sn2 = #{folSn2},
+			fol_nm = #{folNm}
+		where fol_sn = #{folSn}
+	</update>
+
+	<!-- 폴더 delete -->
+	<delete id="deleteFolder" parameterType="int">
+		delete from address_book_folder
+		where fol_sn = #{folSn}
+	</delete>
+
+
+	<!-- 사내주소록 insert -->
+	<insert id="insertAddrBook" parameterType="addrBook">
+		insert into address_book(
+			addrbook_sn, emp_id, fol_sn, emp_id2, name, alias, telno1, eml_addr
+		) values (
+			seq_address_book.nextval, #{empId}, #{folSn}, #{empId2}, #{alias}, #{telno1}, #{emlAddr}
+		)
+	</insert>
+
+	<!-- 사내주소록 select (폴더번호 제외) -->
+	<select id="selectAddrBookList" parameterType="string" resultType="addrBook">
+		select addrbook_sn, emp_id2, name, alias, telno1, telno2, eml_addr
+		from address_book
+		where emp_id = #{empId}
+		order by name
+	</select>
+
+	<!-- 사내주소록 update -->
+	<update id="updateAddrBook" parameterType="addrBook">
+		update address_book
+		set
+			alias = #{alias},
+			telno2 = #{telno2}
+		where addrbook_sn = #{addrbookSn}
+	</update>
+
+	<!-- 사내주소록 delete -->
+	<delete id="deleteAddrBook" parameterType="int">
+		delete from address_book
+		where addrbook_sn = #{addrbookSn}
+	</delete>
+</mapper>

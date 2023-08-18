@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.everyware.mapper.CalendarMapper">
+	<select id="getEventList" parameterType="int" resultType="schedule">
+		select * from schedule 
+		where emp_id in(
+		                    select emp_id
+		                    from employee 
+		                    where dept_id=1
+		                ) or schdl_type='c'
+	</select>
+	<select id="getDeactiveEventList" parameterType="String" resultType="schedule">
+	select * from schedule where emp_id=#{empId} and schdl_bgng_dt is null
+	order by schdl_id desc
+	</select>
+	<insert id="insertSchedule" parameterType="schedule">
+		<selectKey keyProperty="schdlId" resultType="int"  order="BEFORE">
+			select seq_schedule.nextval from dual
+		</selectKey>
+			insert into schedule 
+			values(
+				#{schdlId},#{schdlTtl},#{schdlType},#{schdlCn}, null, null,#{empId},#{schdlColor},null      
+			)
+	</insert>
+	<delete id="deleteSchedule" parameterType="int">
+		delete from schedule where schdl_id=#{schdlId}
+	</delete>
+	<update id="modifySchedule" parameterType="schedule">
+		update schedule
+		<set>
+			<if test="schdlType!=null">SCHDL_TYPE=#{schdlType},</if>
+			<if test="schdlTtl !=null">SCHDL_TTL=#{schdlTtl},</if>
+			<if test="schdlCn !=null">SCHDL_CN=#{schdlCn},</if>
+			<if test="schdlBgngDt !=null">SCHDL_BGNG_DT=#{schdlBgngDt},</if>
+			<if test="schdlEndDt !=null">SCHDL_END_DT=#{schdlEndDt},</if>
+			<if test="empId !=null">EMP_ID=#{empId},</if>
+			<if test="schdlColor !=null">SCHDL_COLOR=#{schdlColor},</if>
+			<if test="schdlAllday !=null">SCHDL_ALLDAY=#{schdlAllday},</if>
+		</set>
+		where SCHDL_ID=#{schdlId}
+	</update>
+</mapper>

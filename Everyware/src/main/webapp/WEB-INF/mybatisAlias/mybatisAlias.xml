@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+ <configuration>
+ 	<!--  
+ 		[마이바티스] 스프링에서 "_"를 사용한 컬럼명 사용시 (Book테이블의 book_id와 같이)
+ 		카멜케이스로 읽어주는 역할(bookId와 같이)
+ 		ex) 테이블 컬럼명이 member_id인 경우 jsp화면단에서 이 값을 사용시 memberId로 사용할 수 있다.
+ 	-->
+ 
+ 	<settings>
+ 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+ 	</settings>
+ 	
+ 	<!-- 자주 사용하는 타입의 별칭을 셋팅 -->
+ 	<typeAliases>
+<!--  		<typeAlias type="클래스명(패키지구조를 포함한)" alias="별칭 명"/> -->
+		<typeAlias type="kr.or.everyware.vo.AuthorityGroup" alias="authorityGroup"/>
+		<typeAlias type="kr.or.everyware.vo.Client" alias="client"/>
+		<typeAlias type="kr.or.everyware.vo.Employee" alias="employee"/>
+		<typeAlias type="kr.or.everyware.vo.EmpAuthority" alias="empAuthority"/>
+		<typeAlias type="kr.or.everyware.vo.Schedule" alias="schedule"/>
+		<typeAlias type="kr.or.everyware.vo.AddressBook" alias="addrBook"/>
+		<typeAlias type="kr.or.everyware.vo.Folder" alias="folder"/>
+		<typeAlias type="kr.or.everyware.vo.Document" alias="doc"/>
+		<typeAlias type="kr.or.everyware.vo.DocumentFile" alias="docFile"/>
+		<typeAlias type="kr.or.everyware.vo.ApprovalLine" alias="apprLine"/>
+		<typeAlias type="kr.or.everyware.vo.Proxy" alias="proxy"/>
+		<typeAlias type="kr.or.everyware.vo.Car" alias="car"/>
+		<typeAlias type="kr.or.everyware.vo.MeetingRoom" alias="mtgRoom"/>
+		<typeAlias type="kr.or.everyware.vo.Reservation" alias="reservation"/>
+		<typeAlias type="kr.or.everyware.vo.DrivingRecord" alias="drvRecord"/>
+		<typeAlias type="kr.or.everyware.vo.AuthMenu" alias="authMenu"/>
+		<typeAlias type="kr.or.everyware.vo.Menu" alias="menu"/>
+ 	</typeAliases>
+ </configuration>
