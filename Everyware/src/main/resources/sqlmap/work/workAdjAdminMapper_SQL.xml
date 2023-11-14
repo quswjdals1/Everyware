@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.everyware.admin.work.mapper.WorkAdjAdminMapper">
+	
+	<!-- 날짜 검색 -->
+	<sql id="searchDate">
+		<if test="searchStartDate != null and searchStartDate != ''
+				 and searchEndDate != null and searchEndDate != ''">
+			<![CDATA[
+ 				AND wa.wa_bfr_bgng_dt >= (TO_DATE(#{searchStartDate},'yyyy-MM-dd'))
+				AND wa.wa_bfr_bgng_dt < (TO_DATE(#{searchEndDate},'yyyy-MM-dd')+1)
+			]]>
+		</if>
+	</sql>
+	
+	<!-- 근태조정 상태 검색 -->
+	<sql id="searchState">
+		<if test="searchState != null and searchState != '' and searchState != 0" >
+ 			AND (wa.wa_status LIKE '%'||#{searchState}||'%')
+		</if>
+	</sql>
+	
+	<!-- 목록 -->
+	<select id="getAdminWorkAdj" parameterType="workAdjAdmin" resultType="workAdjAdmin">
+		SELECT
+			b.*
+		FROM(
+			SELECT 
+				a.*, row_number() OVER (ORDER BY wa_no DESC) rnum
+			FROM(
+				SELECT
+					wa.wa_no
+					, wa.work_no
+					, w.emp_id
+					, e.emp_name
+					, d.dept_nm
+					, p.jbgd_nm
+					, TO_CHAR(wa.wa_bfr_bgng_dt, 'yyyy-MM-dd') AS workDt
+					, TO_CHAR(wa.wa_bfr_bgng_dt, 'DY') AS workDw
+					, TO_CHAR(wa_bfr_bgng_dt, 'HH24:mm:ss') AS wa_bfr_bgng_dt
+					, TO_CHAR(wa_bfr_end_dt, 'HH24:mm:ss') AS wa_bfr_end_dt
+					, TO_CHAR(wa.wa_bgng_dt, 'HH24:mm:ss') AS wa_bgng_dt
+					, TO_CHAR(wa.wa_end_dt, 'HH24:mm:ss') AS wa_end_dt
+					, w.work_state
+					, wa.wa_apply_dt
+					, wa.wa_reason
+					, wa.wa_status
+					, e.cust_id
+				FROM work w, work_adj wa, employee e, department d, position p
+				WHERE 1=1
+				AND w.work_no = wa.work_no
+				AND w.emp_id = e.emp_id
+				AND e.dept_id = d.dept_id
+				AND e.jbgd_id = p.jbgd_id
+				AND e.cust_id = #{custId}
+				<include refid="searchDate" />
+				<include refid="searchState" />
+				ORDER BY wa.wa_no DESC
+			) a
+		) b
+		<![CDATA[
+			WHERE b.rnum >= #{startRow} 
+			AND b.rnum <= #{endRow}
+		]]>
+	</select>
+	
+	<!-- 전체 -->
+<!-- 	<select id="getTotalRecord" parameterType="workAdjAdmin" resultType="int"> -->
+<!-- 		SELECT -->
+<!-- 			COUNT(b.wa_no) -->
+<!-- 		FROM( -->
+<!-- 			SELECT  -->
+<!-- 				a.*, row_number() OVER (ORDER BY wa_no DESC) rnum -->
+<!-- 			FROM( -->
+<!-- 				SELECT -->
+<!-- 					wa.wa_no -->
+<!-- 					, wa.work_no -->
+<!-- 					, w.emp_id -->
+<!-- 					, e.emp_name -->
+<!-- 					, d.dept_nm -->
+<!-- 					, p.jbgd_nm -->
+<!-- 					, TO_CHAR(wa.wa_bfr_bgng_dt, 'yyyy-MM-dd') AS workDt -->
+<!-- 					, TO_CHAR(wa.wa_bfr_bgng_dt, 'DY') AS workDw -->
+<!-- 					, TO_CHAR(wa_bfr_bgng_dt, 'HH24:mm:ss') AS wa_bfr_bgng_dt -->
+<!-- 					, TO_CHAR(wa_bfr_end_dt, 'HH24:mm:ss') AS wa_bfr_end_dt -->
+<!-- 					, TO_CHAR(wa.wa_bgng_dt, 'HH24:mm:ss') AS wa_bgng_dt -->
+<!-- 					, TO_CHAR(wa.wa_end_dt, 'HH24:mm:ss') AS wa_end_dt -->
+<!-- 					, w.work_state -->
+<!-- 					, wa.wa_apply_dt -->
+<!-- 					, wa.wa_reason -->
+<!-- 					, wa.wa_status -->
+<!-- 					, e.cust_id -->
+<!-- 				FROM work w, work_adj wa, employee e, department d, position p -->
+<!-- 				WHERE 1=1 -->
+<!-- 				AND w.work_no = wa.work_no -->
+<!-- 				AND w.emp_id = e.emp_id -->
+<!-- 				AND e.dept_id = d.dept_id -->
+<!-- 				AND e.jbgd_id = p.jbgd_id -->
+<!-- 				AND e.cust_id = #{custId} -->
+<!-- 				<include refid="searchDate" /> -->
+<!-- 				<include refid="searchState" /> -->
+<!-- 				ORDER BY wa.wa_no DESC -->
+<!-- 			) a -->
+<!-- 		) b -->
+<!-- 		<![CDATA[ -->
+<!-- 			WHERE b.rnum >= #{startRow}  -->
+<!-- 			AND b.rnum <= #{endRow} -->
+<!-- 		]]> -->
+<!-- 	</select> -->
+	
+	<!-- 진행 -->
+<!-- 	<select id="getProgressCount" resultType="int"> -->
+<!-- 		SELECT COUNT(wa.wa_no) -->
+<!-- 		FROM work_adj wa -->
+<!-- 		INNER JOIN work w ON wa.work_no = w.work_no -->
+<!-- 		INNER JOIN employee e ON e.emp_id = w.emp_id -->
+<!-- 		WHERE 1=1  -->
+<!-- 		AND	e.cust_id = #{custId} -->
+<!-- 		AND wa.wa_status = 4 -->
+<!-- 		<include refid="searchDate" /> -->
+<!-- 	</select> -->
+	
+	<!-- 승인 -->
+<!-- 	<select id="getApprovedCount" resultType="int"> -->
+<!-- 		SELECT COUNT(wa.wa_no) -->
+<!-- 		FROM work_adj wa -->
+<!-- 		INNER JOIN work w ON wa.work_no = w.work_no -->
+<!-- 		INNER JOIN employee e ON e.emp_id = w.emp_id -->
+<!-- 		WHERE 1=1  -->
+<!-- 		AND	e.cust_id = #{custId} -->
+<!-- 		AND wa.wa_status = 6 -->
+<!-- 		<include refid="searchDate" /> -->
+<!-- 	</select> -->
+	
+	<!-- 반려 -->
+<!-- 	<select id="getRejectedCount" resultType="int"> -->
+<!-- 		SELECT COUNT(wa.wa_no) -->
+<!-- 		FROM work_adj wa -->
+<!-- 		INNER JOIN work w ON wa.work_no = w.work_no -->
+<!-- 		INNER JOIN employee e ON e.emp_id = w.emp_id -->
+<!-- 		WHERE 1=1  -->
+<!-- 		AND	e.cust_id = #{custId} -->
+<!-- 		AND wa.wa_status = 7 -->
+<!-- 		<include refid="searchDate" /> -->
+<!-- 	</select> -->
+	
+	<!-- 상세 -->
+	<select id="getOneWorkAdjAdmin" parameterType="int" resultType="workAdjAdmin">
+		SELECT
+			wa.wa_no
+			, wa.work_no
+			, w.emp_id
+			, e.emp_name
+			, d.dept_nm
+			, p.jbgd_nm
+			, TO_CHAR(wa.wa_bfr_bgng_dt, 'yyyy-MM-dd DY') AS workDt
+<!-- 			, TO_CHAR(wa.wa_bfr_bgng_dt, 'DY') AS workDw -->
+			, TO_CHAR(wa_bfr_bgng_dt, 'HH24:mm:ss') AS wa_bfr_bgng_dt
+			, TO_CHAR(wa_bfr_end_dt, 'HH24:mm:ss') AS wa_bfr_end_dt
+			, TO_CHAR(wa.wa_bgng_dt, 'HH24:mm:ss') AS wa_bgng_dt
+			, TO_CHAR(wa.wa_end_dt, 'HH24:mm:ss') AS wa_end_dt
+			, w.work_state
+			, wa.wa_apply_dt
+			, wa.wa_reason
+			, wa.wa_status
+			, e.cust_id
+		FROM work w, work_adj wa, employee e, department d, position p
+		WHERE 1=1
+		AND w.work_no = wa.work_no
+		AND w.emp_id = e.emp_id
+		AND e.dept_id = d.dept_id
+		AND e.jbgd_id = p.jbgd_id
+		AND wa.wa_no = #{waNo}
+	</select>	
+	
+	<!-- 목록2 -->
+	<select id="getWorkAdjAdminJson" parameterType="String" resultType="workAdj">
+		SELECT prgrs_stts_cd, json_object
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+	</select>
+	
+	<!-- 전체건 -->
+	<select id="getTotalRecord" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+	</select>
+	
+	<!-- 진행건수 -->
+	<select id="getProgressCount" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd != 6
+		AND prgrs_stts_cd != 7
+	</select>
+	
+	<!-- 승인건수 -->
+	<select id="getApprovedCount" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd = 6
+	</select>
+	
+	<!-- 반려건수 -->
+	<select id="getRejectedCount" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd = 7
+	</select>
+</mapper>

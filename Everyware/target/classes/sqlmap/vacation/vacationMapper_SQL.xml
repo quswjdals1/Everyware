@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.everyware.everyware.vacation.mapper.VacationMapper">
+
+	<!-- 목록 -->
+	<select id="getVacationList" parameterType="vacation" resultType="vacation">
+		SELECT 
+			prgrs_stts_cd
+			, json_object
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND emp_id = #{empId}
+	</select>
+	
+	<!-- 휴가항목 -->
+	<select id="getVacItem" parameterType="vacation" resultType="vacation">
+		SELECT
+			vi.vi_type
+			, vi.vi_day
+		FROM vac_item vi
+		WHERE 1=1
+		AND vi.cust_id = #{custId}
+		ORDER BY vi.vi_day DESC
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 목록 -->
+	<select id="getVacationJson" parameterType="String" resultType="vacation">
+		SELECT prgrs_stts_cd, json_object
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND emp_id = #{empId}
+	</select>
+	
+	<!-- 전체건 -->
+	<select id="getTotalRecord" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND emp_id = #{empId}
+	</select>
+	
+	<!-- 진행건수 -->
+	<select id="getProgressCount" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND emp_id = #{empId}
+		AND prgrs_stts_cd != 6
+		AND prgrs_stts_cd != 7
+	</select>
+	
+	<!-- 승인건수 -->
+	<select id="getApprovedCount" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND emp_id = #{empId}
+		AND prgrs_stts_cd = 6
+	</select>
+	
+	<!-- 반려건수 -->
+	<select id="getRejectedCount" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND emp_id = #{empId}
+		AND prgrs_stts_cd = 7
+	</select>
+	
+	
+	
+	
+	<!-- 관리자 -->
+	<!-- 목록 -->
+	<select id="getVacationAdminJson" parameterType="String" resultType="vacation">
+		SELECT prgrs_stts_cd, json_object
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND cust_id = #{custId}
+	</select>
+	
+	<!-- 전체건 -->
+	<select id="getTotalRecordAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND cust_id = #{custId}
+	</select>
+	
+	<!-- 진행건수 -->
+	<select id="getProgressCountAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd != 6
+		AND prgrs_stts_cd != 7
+	</select>
+	
+	<!-- 승인건수 -->
+	<select id="getApprovedCountAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd = 6
+	</select>
+	
+	<!-- 반려건수 -->
+	<select id="getRejectedCountAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 2
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd = 7
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>

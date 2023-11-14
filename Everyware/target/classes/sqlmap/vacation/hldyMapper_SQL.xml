@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.everyware.admin.vacation.mapper.HldyMapper">
+	
+	<!-- 목록 -->
+	<select id="getHldy" resultType="hldy">
+	<!-- kr.or.everyware.admin.vacation.mapper.HldyMapper.getHldy -->
+		SELECT 
+			h.hldy_no
+			, TO_CHAR(h.hldy_dt, 'yyyy-MM-dd') AS hldyDt
+			, h.hldy_nm
+			, h.hldy_yn
+			, h.hldy_memo
+		FROM hldy h
+		WHERE h.cust_id = #{custId}
+		
+	</select>
+	
+	<!-- 추가 -->
+	<insert id="addHldy" parameterType="hldy">
+	<!-- kr.or.everyware.admin.vacation.mapper.HldyMapper.addHldy -->
+		INSERT INTO hldy(
+			hldy_no
+			, cust_id
+			, hldy_dt
+			, hldy_nm
+			, hldy_yn
+			, hldy_memo
+		) VALUES (
+			seq_hldy.NEXTVAL
+			, #{custId}
+			, #{hldyDt}
+			, #{hldyNm}
+			, #{hldyYn}
+			, #{hldyMemo}
+		)
+	</insert>
+	
+	<!-- 삭제 -->
+	<delete id="delHldy">
+	<!-- kr.or.everyware.admin.vacation.mapper.HldyMapper.delHldy -->
+		DELETE FROM hldy
+		WHERE hldy_no = #{hldyNo}
+	</delete>
+	
+	<!-- 수정 -->
+	<update id="editHldy" parameterType="hldy">
+	<!-- kr.or.everyware.admin.vacation.mapper.HldyMapper.editHldy -->
+		UPDATE hldy
+		SET 
+			hldy_dt = #{hldyDt}
+			, hldy_nm = #{hldyNm}
+			, hldy_yn = #{hldyYn}
+			, hldy_memo = #{hldyMemo}
+		WHERE hldy_no = #{hldyNo}
+	</update>
+	
+</mapper>

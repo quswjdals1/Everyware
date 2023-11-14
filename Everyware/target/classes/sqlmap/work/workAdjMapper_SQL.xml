@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.or.everyware.everyware.work.mapper.WorkAdjMapper">
+
+	<!-- 날짜 검색 -->
+	<sql id="searchDate">
+		<if test="searchStartDate != null and searchStartDate != ''
+				 and searchEndDate != null and searchEndDate != ''">
+			<![CDATA[
+ 				AND wa.wa_bfr_bgng_dt >= (TO_DATE(#{searchStartDate},'yyyy-MM-dd'))
+				AND wa.wa_bfr_bgng_dt < (TO_DATE(#{searchEndDate},'yyyy-MM-dd')+1)
+			]]>
+		</if>
+	</sql>
+	
+	<!-- 근태조정 상태 검색 -->
+	<sql id="searchState">
+		<if test="searchState != null and searchState != '' and searchState != 0" >
+ 			AND (wa.wa_status LIKE '%'||#{searchState}||'%')
+		</if>
+	</sql>
+	
+	<!-- 전체건 -->
+<!-- 	<select id="getTotalRecord" parameterType="workAdj" resultType="int"> -->
+<!-- 		SELECT -->
+<!-- 			COUNT(b.work_no) -->
+<!-- 		FROM( -->
+<!-- 			SELECT  -->
+<!-- 				a.*, row_number() OVER (ORDER BY wa_no DESC) rnum -->
+<!-- 			FROM( -->
+<!-- 				SELECT  -->
+<!-- 					wa.wa_no -->
+<!-- 					, wa.work_no -->
+<!-- 					, TO_CHAR(wa.wa_bfr_bgng_dt, 'HH24:mm:ss') AS workDt -->
+<!-- 					, TO_CHAR(wa.wa_bgng_dt, 'HH24:mm:ss') -->
+<!-- 					, TO_CHAR(wa.wa_end_dt, 'HH24:mm:ss') -->
+<!-- 					, wa.wa_apply_dt -->
+<!-- 					, wa.wa_reason -->
+<!-- 					, wa.wa_status -->
+<!-- 					, TO_CHAR(wa_bfr_bgng_dt, 'HH24:mm:ss') -->
+<!-- 					, TO_CHAR(wa_bfr_end_dt, 'HH24:mm:ss') -->
+<!-- 				FROM work w, work_adj wa -->
+<!-- 				WHERE 1=1  -->
+<!-- 				AND w.emp_id = #{empId} -->
+<!-- 				AND w.work_no = wa.work_no -->
+<!-- 				<include refid="searchDate" /> -->
+<!-- 				<include refid="searchState" /> -->
+<!-- 				ORDER BY wa.wa_no DESC -->
+<!-- 			) a -->
+<!-- 		) b -->
+<!-- 		<![CDATA[ -->
+<!-- 			WHERE b.rnum >= #{startRow}  -->
+<!-- 			AND b.rnum <= #{endRow} -->
+<!-- 		]]> -->
+<!-- 	</select> -->
+	
+	
+	<!-- 사원의 근태조정목록 -->
+	<select id="getWorkAdjList" parameterType="workAdj" resultType="workAdj">
+	<!-- kr.or.everyware.everyware.work.mapper.WorkAdjMapper.getWorkAdjList -->
+		SELECT
+			b.*
+		FROM(
+			SELECT 
+				a.*, row_number() OVER (ORDER BY wa_no DESC) rnum
+			FROM(
+				SELECT 
+					wa.wa_no
+					, wa.work_no
+					, TO_CHAR(wa_bfr_bgng_dt, 'yyyy-MM-dd') AS workDt
+					, TO_CHAR(wa_bfr_bgng_dt, 'Dy') AS workDw
+					, TO_CHAR(wa.wa_bgng_dt, 'HH24:mm:ss') AS wa_bgng_dt
+					, TO_CHAR(wa.wa_end_dt, 'HH24:mm:ss') AS wa_end_dt
+					, wa.wa_apply_dt
+					, wa.wa_reason
+					, wa.wa_status
+					, TO_CHAR(wa_bfr_bgng_dt, 'HH24:mm:ss') AS wa_bfr_bgng_dt
+					, TO_CHAR(wa_bfr_end_dt, 'HH24:mm:ss') AS wa_bfr_end_dt
+				FROM work w, work_adj wa
+				WHERE 1=1 
+				AND w.emp_id = #{empId}
+				AND w.work_no = wa.work_no
+				<include refid="searchDate" />
+				<include refid="searchState" />
+				ORDER BY wa.wa_no DESC
+			) a
+		) b
+		<![CDATA[
+			WHERE b.rnum >= #{startRow} 
+			AND b.rnum <= #{endRow}
+		]]>
+	</select>
+	
+	<!-- 근태조정 신청 insert -->
+	<insert id="insertWorkAdj" parameterType="workAdj">
+	   INSERT INTO work_adj(
+	       wa_no
+	      ,work_no
+	      ,wa_bgng_dt
+	      ,wa_end_dt
+	      ,wa_apply_dt
+	      ,wa_reason
+	      ,wa_status
+	      ,wa_bfr_bgng_dt
+	      ,wa_bfr_end_dt
+	   ) VALUES (
+	       seq_work_adj.NEXTVAL
+	      ,#{workNo}
+	      ,TO_DATE(#{workDt} || ' ' || #{waBgngDt}, 'YYYY-MM-DD HH24:MI')  
+	      ,TO_DATE(#{workDt} || ' ' || #{waEndDt}, 'YYYY-MM-DD HH24:MI')  
+	      ,SYSDATE
+	      ,#{waReason}
+	      ,4
+	      ,TO_DATE(#{workDt} || ' ' || #{waBfrBgngDt}, 'YYYY-MM-DD HH24:MI:SS')  
+	      ,TO_DATE(#{workDt} || ' ' || #{waBfrEndDt}, 'YYYY-MM-DD HH24:MI:SS')  
+	   )
+	</insert>
+	
+	<!-- 근태조정 승인처리 update -->
+	<update id="updateWorkAdjWithConfirm" parameterType="workAdj">
+	   UPDATE work_adj
+	   SET wa_status = 6
+	   WHERE wa_no = #{waNo}
+	</update>
+	
+	<!-- 근태조정 반려처리 update -->
+	<update id="updateWorkAdjWithReject" parameterType="workAdj">
+	   UPDATE work_adj
+	   SET wa_status = 7
+	   WHERE wa_no = #{waNo}
+	</update>
+	
+	<!-- 상세보기 -->
+	<select id="getOneWorkAdj" parameterType="int" resultType="workAdj">
+		SELECT 
+			wa.wa_no
+			, wa.work_no
+			, TO_CHAR(wa_bfr_bgng_dt, 'yyyy-MM-dd') AS workDt
+			, TO_CHAR(wa.wa_bgng_dt, 'HH24:mm:ss') AS wa_bgng_dt
+			, TO_CHAR(wa.wa_end_dt, 'HH24:mm:ss') AS wa_end_dt
+			, wa.wa_apply_dt
+			, wa.wa_reason
+			, wa.wa_status
+			, TO_CHAR(wa_bfr_bgng_dt, 'HH24:mm:ss') AS wa_bfr_bgng_dt
+			, TO_CHAR(wa_bfr_end_dt, 'HH24:mm:ss') AS wa_bfr_end_dt
+		FROM work w, work_adj wa
+		WHERE 1=1 
+		AND wa.wa_no = #{waNo}
+		AND w.work_no = wa.work_no
+	</select>
+	
+	<!-- 목록2 -->
+	<select id="getWorkAdjJson" parameterType="String" resultType="workAdj">
+		SELECT prgrs_stts_cd, json_object
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND emp_id = #{empId}
+	</select>
+	
+		<!-- 전체건 -->
+	<select id="getTotalRecord" parameterType="String" resultType="int">
+	<!-- kr.or.everyware.everyware.work.mapper.WorkAdjMapper.getTotalRecord -->
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND emp_id = #{empId}
+	</select>
+	
+	<!-- 진행건수 -->
+	<select id="getProgressCount" parameterType="String" resultType="int">
+	<!-- kr.or.everyware.everyware.work.mapper.WorkAdjMapper.getProgressCount -->
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND emp_id = #{empId}
+		AND prgrs_stts_cd != 6
+		AND prgrs_stts_cd != 7
+	</select>
+	
+	<!-- 승인건수 -->
+	<select id="getApprovedCount" parameterType="String" resultType="int">
+	<!-- kr.or.everyware.everyware.work.mapper.WorkAdjMapper.getApprovedCount -->
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND emp_id = #{empId}
+		AND prgrs_stts_cd = 6
+	</select>
+	
+	<!-- 반려건수 -->
+	<select id="getRejectedCount" parameterType="String" resultType="int">
+	<!-- kr.or.everyware.everyware.work.mapper.WorkAdjMapper.getRejectedCount -->
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND emp_id = #{empId}
+		AND prgrs_stts_cd = 7
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 관리자 -->
+	<select id="getWorkAdjAdminJson" parameterType="String" resultType="workAdj">
+		SELECT prgrs_stts_cd, json_object
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+	</select>
+	
+	<!-- 전체건 -->
+	<select id="getTotalRecordAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+	</select>
+	
+	<!-- 진행건수 -->
+	<select id="getProgressCountAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd != 6
+		AND prgrs_stts_cd != 7
+	</select>
+	
+	<!-- 승인건수 -->
+	<select id="getApprovedCountAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd = 6
+	</select>
+	
+	<!-- 반려건수 -->
+	<select id="getRejectedCountAdmin" parameterType="String" resultType="int">
+		SELECT COUNT(prgrs_stts_cd)
+		FROM approval
+		WHERE 1=1
+		AND tmplt_cd = 1
+		AND cust_id = #{custId}
+		AND prgrs_stts_cd = 7
+	</select>
+</mapper>
